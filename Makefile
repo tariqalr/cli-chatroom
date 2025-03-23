@@ -3,6 +3,8 @@ CFLAGS = -Wall -pthread
 
 all: server client
 
+debug: clean all
+
 server: src/server.c src/list.c
 	@$(CC) $(CFLAGS) src/server.c src/list.c -o server
 

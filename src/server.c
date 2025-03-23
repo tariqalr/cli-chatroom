@@ -45,7 +45,17 @@ void* client_handler(void* arg){
 			printf("%s, socket %d\n", buf, client->fd);
 			send_to_clients(client,buf);
 			break;
-		} else if (strlen(buf)==0) continue;
+		} else if (!strcmp(buf,"ls")) {
+			int client_count=0;
+			char tbuf[LENGTH_OUTGOING]={0};
+			for (ClientNode *tmp = head; tmp; tmp=tmp->next, client_count++) { //unsafe buffer overflow possibility
+				strcat(tbuf,tmp->nickname);
+				if (tmp->next) strcat(tbuf,",\n\t");
+			}
+			snprintf(buf,LENGTH_OUTGOING,"%d online:\n\t%s",client_count,tbuf);
+			send(client->fd,buf,LENGTH_OUTGOING,0);
+		}
+		else if (strlen(buf)==0) continue;
 		else {
 			char tbuf[LENGTH_OUTGOING];
 			snprintf(tbuf,LENGTH_OUTGOING,"%s: %s",client->nickname,buf);

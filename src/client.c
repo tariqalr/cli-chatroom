@@ -17,7 +17,8 @@ void recv_handler(){
 	char buf[LENGTH_INCOMING];
 	while (1){
 		if (!recv(client_sockfd,buf,LENGTH_INCOMING,0)) break; //connection closed by server
-		printf("%s\n", buf);
+		printf("\r%s\n> ", buf);
+		fflush(stdout);
 	}
 }
 
@@ -27,6 +28,8 @@ void send_handler(){
 		if (fgets(buf,LENGTH_OUTGOING,stdin)) {
 			buf[strcspn(buf,"\n")]='\0';
 			send(client_sockfd,buf,LENGTH_OUTGOING,0);
+			printf("> ");
+			fflush(stdout);
 			if (!strcmp(buf,"!!!")) break;
 		}
 	}
@@ -39,7 +42,7 @@ int main(int argc, char **argv) {
 	}
 	struct addrinfo hints, *res, *tmp;
 
-	printf("Welcome\nSend !!! to exit");
+	printf("Welcome\nSend !!! to exit, ls to display users\n");
 
 	char nickname[LENGTH_NAME];
 	while(1){
@@ -84,6 +87,7 @@ int main(int argc, char **argv) {
 	freeaddrinfo(res);
 
 	send(client_sockfd,nickname,LENGTH_NAME,0);
+	printf("> ");
 
 	pthread_t recv_tid;
 	if (pthread_create(&recv_tid,NULL,(void*)recv_handler,NULL)) {
