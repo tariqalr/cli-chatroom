@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
+#include <signal.h>
 #include "list.h"
 
 #define PORT "8274"

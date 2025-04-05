@@ -1,4 +1,5 @@
-CC = clang
+#replace gcc with clang if necessary
+CC = gcc
 CFLAGS = -Wall -pthread
 
 all: server client
